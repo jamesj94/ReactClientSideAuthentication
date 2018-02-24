@@ -12,11 +12,21 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
   </fieldset>
 )
 
-class SignUp extends Component {
+class Signup extends Component {
 
-  handleFormSubmit({email, password }) {
+  handleFormSubmit(formProps) {
     // Sign user up
-    this.props.signUpUser({ email, password })
+    this.props.signupUser(formProps)
+  }
+
+  renderAlert(){
+    if(this.props.errorMessage){
+      return(
+        <div className="alert alert-danger">
+          <strong>Oops!</strong>{this.props.errorMessage}
+        </div>
+      );
+    }
   }
 
   render() {
@@ -28,28 +38,44 @@ class SignUp extends Component {
         <Field name="password" component={renderField} type="password" label="Password"/>
         <Field name="password_confirmation" component={renderField} type="password" label="Password Confirmation"/>
         <button type="submit" className="btn btn-primary">Sign Up</button>
+        <div component={renderField}>{this.renderAlert()}</div>
       </form>
     );
   }
 }
 
 function validate(values) {
-  let errors = {}
+  const errors = {}
+
+  if(!values.email){
+    errors.email = 'Please enter an email';
+  }
+
+  if(!values.password){
+    errors.password = 'Please enter a password'
+  }
+
+  if(!values.password_confirmation){
+    errors.password_confirmation = 'Please confirm your password';
+  }
+
 
   if (values.password != values.password_confirmation) {
-    errors.password = 'Password and password confirmation don\'t match!'
+    errors.password = 'Password and password confirmation don\'t match!';
   }
+
 
   return errors
 }
 
 function mapStateToProps(state) {
   return {
-    errorMessage: state.auth.error
-  }
+      errorMessage: state.auth.error
+  };
 }
 
 export default connect(mapStateToProps, actions)(reduxForm({
-  form:'SignUp',
+  form:'signup',
+  fields: ['email', 'password', 'password_confirmation'],
   validate
-})(SignUp));
+})(Signup));

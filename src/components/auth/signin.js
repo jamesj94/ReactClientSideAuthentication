@@ -23,18 +23,15 @@ class Signin extends Component {
     const { handleSubmit, fields: { email, password }} = this.props;
     return (
       <form onSubmit={handleSubmit(this.handleFormSubmit)}>
-        {/* E-Mail */}
         <fieldset className="form-group">
           <label>E-Mail:</label>
           <Field name="email" component="input" type="email" className="form-control" />
         </fieldset>
-        {/* Password */}
         <fieldset className="form-group">
           <label>Password:</label>
           <Field name="password" component="input" type="password" className="form-control" />
         </fieldset>
         {this.renderAlert()}
-        {/* Submit */}
         <button type="submit" className="btn btn-primary">Sign In</button>
       </form>
     )
